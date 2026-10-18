@@ -37,7 +37,7 @@ If you want to test the flash block, build yourself a test module, something lik
    
 
 ### The Operation
-You will notice that the LED is in the way. Get a pen and mark on of its Pin with the board, so you can solder it in back later in the correct Position. Its a Red-Green LED, if you solder it in the wrong way, it will light up in red.
+You will notice that the LED is in the way. Get a pen and mark on of its Pin with the board, so you can solder it in back later in the correct Position. It's a Red-Green LED, if you solder it in the wrong way, it will light up in red.
 
 After the LED is out of the way, you give some tin on the pins from the flash block and connect all 4 pins in a row together with tin. This way it will be easier to desolder it, because you need to melt all pins at the same time.
 
@@ -65,7 +65,7 @@ The next step is to tell Atom (i did not do it with Arduino IDE, sry) to use the
 Note: You can only use 3MB, because 1MB is needed for SPIFFS.
 
 To do this, you need to edit the platformio.ini file.
-Search for your prefered language Block and copy the whole Block.
+Search for your preferred language Block and copy the whole Block.
 Rename it to e.g. Sonoff-DE-4M
 Now change the following line
 

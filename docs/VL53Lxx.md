@@ -15,7 +15,7 @@
     When [compiling your build](Compile-your-build) add the following to `user_config_override.h`:
     ```arduino
     #ifndef USE_VL53L1X 
-    #define #define USE_VL53L1X                    // [I2cDriver54] Enable VL53L1X time of flight sensor (I2C address 0x29) using Pololu VL53L1X library (+2k9 code)
+    #define USE_VL53L1X                            // [I2cDriver54] Enable VL53L1X time of flight sensor (I2C address 0x29) using Pololu VL53L1X library (+2k9 code)
       #define VL53L1X_XSHUT_ADDRESS 0x78           //   VL53L1X base address when used with XSHUT control
       #define VL53L1X_DISTANCE_MODE Long           //   VL53L1X distance mode : Long | Medium | Short
     #endif
@@ -68,14 +68,14 @@ In the **_Configuration -> Configure Module_** page assign:
 1. GPIOa to `I2C SDA`
 2. GPIOb to `I2C SCL`
 
-On ESP8266 almost any GPIO can be used for I2C except for GPIO15. However the standard is to use GPIO4 (D1) for I2C SCL and GPIO5 (D2) for I2C SDA.
+On ESP8266 almost any GPIO can be used for I2C except for GPIO15.
 
 On ESP32 any pin can be assigned to I2C.
 
 #### Step 2 - Enable the proper driver
 I2C devices are identified on the I2C bus by their address. Because the number of possible addresses are limited (127) a lot of devices are sharing the same address. This as means that it is not possible to use simultaneously on the same I2C bus 2 devices that are using the same address. Beside, in most cases, a driver cannot correctly identify the chip it is talking to. This is why in most of the case it is important to disable Tasmota drivers for devices that you are not using and leave enabled only driver for a device you are going to use.
 
-In the list of [I2CDEVICES](I2CDEVICES) supported by Tasmota it is listed that the address 0x29 can be used by either TSL2561 (driver 16), VL53L0X (driver 31), TSL2591 (driver 40) and VL53L1X (driver VL53L1X). It means that you can't use a TSL2561 or a TSL2591 at the same time as a VL53L0X/VL53L1X. ANd you can't use a VL53L0X at the same time as a VL53L1X.
+In the list of [I2CDEVICES](I2CDEVICES) supported by Tasmota it is listed that the address 0x29 can be used by either TSL2561 (driver 16), VL53L0X (driver 31), TSL2591 (driver 40) and VL53L1X (driver VL53L1X). It means that you can't use a TSL2561 or a TSL2591 at the same time as a VL53L0X/VL53L1X. And you can't use a VL53L0X at the same time as a VL53L1X.
 
 If you have build a tasmota binary that include the driver for TSL2561 and/or TSL2591 you must disable those drivers. You must also disable the driver for the other VL53LXX device. As a summary, here are the command to type in the console:
 
@@ -87,7 +87,7 @@ After a reboot Tasmota will detect the VL53LXX automatically is the proper drive
 
 ![image](_media/peripherals/vl53l0x.png)
 
-Sensor sends a  `tele/%topic%/SENSOR` JSON reponse:
+Sensor sends a  `tele/%topic%/SENSOR` JSON response:
 
 For VL53L0X:
 ```json
@@ -140,7 +140,7 @@ Example: for VL53L0X it sends `tele/%topic%/SENSOR` JSON such as:
 
 With VL053L1X, the name of the sensor is adapted.
 
-The index separator is either a `-` if `SetOption4` is `0` or a `_` if it is `1`. See [`SetOption4`](Commands#setoption4).
+The index separator is either a `-` if `SetOption4` is `0` or a `_` if it is `1`. See [`SetOption4`](Commands.md#setoption4).
 
 ![image](https://user-images.githubusercontent.com/35405447/111362860-144c4780-866e-11eb-84f1-461d2857ede7.png)
 
@@ -183,7 +183,14 @@ or
 
 ### VL53L1X options
 
-* **Distance range** can be changed between *Long*, *Medium* or *Short* by copying one (and only one) of the below lines in `user_config_override.h`. The default value is **Long**. For details on those range, please refer to the [datasheet](#the-devices) of the device.
+* **Distance range** can be changed between *Long*, *Medium* or *Short* by copying one (and only one) of the below lines in `user_config_override.h`. The default value is **Long**. From the datasheet:
+
+| Distance Mode  | Max (Dark) | Max (Ambient Light) | Unit |
+|-----------------|---------|---------|------|
+| Short    | 136    | 135    | cm   |
+| Medium | 290      | 76      | cm    |
+| Long | 360      | 73      | cm    |
+
 ```cpp
 #define VL53L1X_DISTANCE_MODE Long
 #define VL53L1X_DISTANCE_MODE Medium

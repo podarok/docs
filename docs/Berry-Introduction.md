@@ -2,7 +2,7 @@
 
 This quick start will drive you in the basics of the Berry language. It should take no more than 20 minutes and is inspired by [Ruby in Twenty Minutes](https://www.ruby-lang.org/en/documentation/quickstart/)
 
-Berry is a ultra-lightweight dynamically typed scripting language. It is designed for lower-performance embedded devices. It also runs on a regular computer, and it can run directly in your browser for quick testing.
+Berry is an ultra-lightweight dynamically typed scripting language. It is designed for lower-performance embedded devices. It also runs on a regular computer, and it can run directly in your browser for quick testing.
 
 
 Berry is the next generation scripting for Tasmota, embedded by default in all ESP32 based firmwares. It is used for advanced scripting and superseded Rules. Its advanced features are used to extend Tasmota: adding commands, adding drivers (I2C, serial...), extending the web UI, adding full applications (TAPP files), driving advanced graphics with [LVGL](https://lvgl.io/).
@@ -71,7 +71,7 @@ You can convert an integer to floating point using `real()` and truncate to inte
 1
 ```
 
-Beyond the core Berry language, advanced math function are available via the additional module `math` [see documentation](https://github.com/berry-lang/berry/wiki/Chapter-7#math-module).
+Beyond the core Berry language, advanced math function are available via the additional module `math` [see documentation](https://berry.readthedocs.io/en/latest/source/en/Chapter-7.html#math-module).
 
 ``` ruby
 > import math
@@ -395,7 +395,7 @@ Indentation has no impact on Berry compiler, it's only by convention to make sou
 
 ## Maps
 
-Maps are a very common and powerful feature to store key/value pairs. They are declared usin `{}`.
+Maps are a very common and powerful feature to store key/value pairs. They are declared using `{}`.
 
 ``` ruby
 > m1 = {}           # empty map
@@ -561,7 +561,7 @@ A function may or may not return a value with `return <expression>`. If you call
 
 ## Closures
 
-Let's finish this introduction with a very powerful feature known as closures. It is sometimes seen as intimidating or complex, but it's actually very simple. We will visit only the most common use of closures, if you want to get more details see the [Berry documentation](https://github.com/berry-lang/berry/wiki/Chapter-5#closure).
+Let's finish this introduction with a very powerful feature known as closures. It is sometimes seen as intimidating or complex, but it's actually very simple. We will visit only the most common use of closures, if you want to get more details see the [Berry documentation](https://berry.readthedocs.io/en/latest/source/en/Chapter-5.html#closure).
 
 Let's go back to our simple Byer example (class that says Bye).
 
@@ -630,7 +630,7 @@ Advanced users: there is a compact syntax for simple callbacks: `def cb(a,b) ret
 
 ## Consider Yourself Introduced
 
-So that's a quick tour of Berry. Please have a look at the online [Berry documentation](https://github.com/berry-lang/berry/wiki/Reference).
+So that's a quick tour of Berry. Please have a look at the online [Berry documentation](https://berry.readthedocs.io/en/latest/source/en/Reference.html).
 
 For Tasmota users, also have a look at the [Tasmota Berry documentation](https://tasmota.github.io/docs/Berry/) and [Tasmota Berry Cookbook](https://tasmota.github.io/docs/Berry-Cookbook/).
 

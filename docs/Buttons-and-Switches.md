@@ -5,6 +5,25 @@ A typical device usually has at least one button (exception being bulbs and some
 !!! note
     Other than relays/lights, Tasmota does not publish the state of components (switches, buttons, sensors, etc.) in real-time. State of components is transmitted automatically each [TelePeriod](Commands.md#teleperiod) via the `SENSORS` message.
 
+# Choose GPIO configuration
+All board are not born equal so does your own diy realisations, you might have choosen to put your own pull-up resistors , or had an inverted logic on your button input.
+
+The first thing is to correctly select the Button or Switch variant accordingly in the "Configure module" or "Configure template" menu.
+the variants supported by ESP8266 are following :
+
+- Button : Button active low, internal pull-up resistor
+- Button_n :  Button active low, no internal pull-up resistor (_n like NoPullUp)
+- Button_i : Button inverted, active high with internal pull-up resistor
+- Button_in :  Button inverted, active high no internal pull-up resistor (_in like Inverted NoPullUp)
+- Switch : Switch with internal pull-up resistor
+- Switch_n : Switch without pull-up resistor
+
+the ESP32 supports all forementionned variants plus : 
+
+- Button_d : Button with internal pull-down resistor
+- Button_id : Button inverted, active high with internal pull-down resistor
+- Switch_d : Switch with internal pull-down resistor
+
 # Button vs. Switch
 A button (also called a push-button) is a momentary or non-latching switch which causes a temporary change in the state of an electrical circuit only while the switch is pressed. An automatic mechanism (i.e. a spring) returns the switch to its default position immediately afterwards, restoring the initial circuit condition.
 
@@ -25,7 +44,7 @@ In Tasmota a `Switch` is any switch or push-button additionally connected to a f
 - [PIR sensor](https://en.wikipedia.org/wiki/Passive_infrared_sensor) - even though it's technically a  sensor it is [configured as a switch in Tasmota](PIR-Motion-Sensors)
 - [mechanical push-button](https://en.wikipedia.org/wiki/Push-button)
 
-By default a switch toggles the corresponding power state (f.e. `Switch1` controls `Power1`). Every time the switch gets flipped the power state of the relay toggles.
+By default a switch toggles the corresponding power state (e.g., `Switch1` controls `Power1`). Every time the switch gets flipped the power state of the relay toggles.
 
 If you want to detach switches from relays read [here](#detach-switches-with).
 
@@ -158,11 +177,18 @@ SwitchMode, as the name implies, applies _**ONLY**_ to GPIO configured in Tasmot
     !!! tip "This mode is useful with [PIR sensors](PIR-Motion-Sensors)"
 
 **`SwitchMode 15`**
-:    Send only MQTT message on switch change. This will stop the switch from controlling power outputs.
+:    Send only MQTT message on switch change. This will stop the switch from controlling power outputs, and you get no state values for rules.
 
     ```console
     tele/tasmota/SENSOR = {"Time":"2021-01-01T00:00:00","Switch1":"OFF"}
     tele/tasmota/SENSOR = {"Time":"2021-01-01T00:00:00","Switch1":"ON"}
+    ```
+**`SwitchMode 16`**
+:    Send only MQTT message on inverted switch change. This will stop the switch from controlling power outputs, and you get no state values for rules.
+
+    ```console
+    tele/tasmota/SENSOR = {"Time":"2021-01-01T00:00:00","Switch1":"ON"}
+    tele/tasmota/SENSOR = {"Time":"2021-01-01T00:00:00","Switch1":"OFF"}
     ```
 
     !!! tip "Also see `SetOption114` below."
@@ -180,7 +206,7 @@ To ignore default button behaviour of controlling power outputs you can:
 
 1. use [`SetOption73 1`](Commands.md#setoption73)
 2. use [`ButtonTopic`](#buttontopic)
-3. define a rule which triggers on `Button<x>#State`. Take note: If the rule trigger only certain states, default behaviour is supressed only for those states.
+3. define a rule which triggers on `Button<x>#State`. Take note: If the rule trigger only certain states, default behaviour is suppressed only for those states.
 
 
 !!! example "Make Button1 publish its value to `stat/custom-topic/BUTTON` and not control Power1"
@@ -201,31 +227,31 @@ Multipress functions for 2 and more presses cannot be changed using SetOptions o
 
 !!! note
     `Button1` can directly control up to five relays. The number of the activated relay corresponds to the number of button presses and this feature is not present in the other buttons.
-    When ButtonTopic is set to default `0` a button will always send its state for rules.
+    When ButtonTopic is set to default `0` a button will always send its state for rules. In the below, you can enable `SetOption4` to replace the "RESULT" part of the topic.
 
 `1 short press`
-:    Toggles the power state. This will blink the LED once and send an MQTT status message like `stat/tasmota/POWER = ON` or another one like `stat/tasmota/BUTTON<x> = {"ACTION":"SINGLE"}` when SetOption73 is enabled. The button state for rules is `2` (`10` if `Setoption73` is enabled).
+:    Toggles the power state. This will blink the LED once and send an MQTT status message like `stat/tasmota/POWER = ON` or another one like `stat/tasmota/RESULT = {"Button<x>":{"Action":"SINGLE"}}` when SetOption73 is enabled. The button state for rules is `2` (`10` if `Setoption73` is enabled).
 
 `2 short presses`
-:    When using Button1 toggles the second power state (if available on the device). This will blink the LED twice and send an MQTT status message like `stat/tasmota/POWER2 = ON` or another one like `stat/tasmota/BUTTON<x> = {"ACTION":"DOUBLE"}` when SetOption73 is enabled. The button state for rules is `11`.
+:    When using Button1 toggles the second power state (if available on the device). This will blink the LED twice and send an MQTT status message like `stat/tasmota/POWER2 = ON` or another one like `stat/tasmota/RESULT = {"Button<x>":{"Action":"DOUBLE"}}` when SetOption73 is enabled. The button state for rules is `11`.
 
 `3 short presses`
-:    When using Button1 toggles the third power state (if available on the device). This will blink the LED three times and send an MQTT status message like `stat/tasmota/POWER3 = ON` or another one like `stat/tasmota/BUTTON<x> = {"ACTION":"TRIPLE"}` when SetOption73 is enabled. The button state for rules is `12`.
+:    When using Button1 toggles the third power state (if available on the device). This will blink the LED three times and send an MQTT status message like `stat/tasmota/POWER3 = ON` or another one like `stat/tasmota/RESULT = {"Button<x>":{"Action":"TRIPLE"}}` when SetOption73 is enabled. The button state for rules is `12`.
 
 `4 short presses`
-:    When using Button1 toggles the fourth power state (if available on the device). This will blink the LED for times and send an MQTT status message like `stat/tasmota/POWER4 = ON` or another one like `stat/tasmota/BUTTON<x> = {"ACTION":"QUAD"}` when SetOption73 is enabled. The button state for rules is `13`.
+:    When using Button1 toggles the fourth power state (if available on the device). This will blink the LED for times and send an MQTT status message like `stat/tasmota/POWER4 = ON` or another one like `stat/tasmota/RESULT = {"Button<x>":{"Action":"QUAD"}}` when SetOption73 is enabled. The button state for rules is `13`.
 
 `5 short presses`
-:    When using Button1 toggles the fifth power state (if available on the device). This will blink the LED five times and send an MQTT status message like `stat/tasmota/POWER5 = ON` or another one like `stat/tasmota/BUTTON<x> = {"ACTION":"PENTA"}` when SetOption73 is enabled. The button state for rules is `14`.
+:    When using Button1 toggles the fifth power state (if available on the device). This will blink the LED five times and send an MQTT status message like `stat/tasmota/POWER5 = ON` or another one like `stat/tasmota/RESULT = {"Button<x>":{"Action":"PENTA"}}` when SetOption73 is enabled. The button state for rules is `14`.
 
 `6 short presses`
-:    Start [`WifiConfig 2`](Commands.md#wificonfig). Can be disabled using [SetOption1 1](Commands.md#setoption1)
+:    Set [`WifiConfig 2`](Commands.md#wificonfig) (start Wi-Fi Manager). Can be disabled using [`SetOption1 1`](Commands.md#setoption1). For [security reasons](Securing-your-IoT-from-hacking.md#disable-unsecured-fallback-wifi-wifimanager), you should change back `WifiConfig` after that.
 
-`**Long press**`
+#### `Long press`
 :    There are two separate functions associated with a button long press based on how long it is held:
 
     1. When held continuously for 40 seconds (Configurable with [SetOption32](Commands.md#setoption32), value is 10x the configured hold time) Tasmota will reset to firmware defaults and restart.
-    2. If enabled, button pressed for 4 seconds (Configurable with [SetOption32](Commands.md#setoption32)) creates a HOLD action and send an MQTT status message like `stat/tasmota/BUTTON<x> = {"ACTION":"HOLD"}` when SetOption73 is enabled. The button state for rules is `3`.
+    2. If enabled, button pressed for 4 seconds (Configurable with [SetOption32](Commands.md#setoption32)) creates a HOLD action and send an MQTT status message like `stat/tasmota/RESULT = {"Button<x>":{"Action":"HOLD"}}` when SetOption73 is enabled. The button state for rules is `3`. With SetOption73 enabled, when the button is released you'll also get MQTT messages like `stat/tasmota/RESULT = {"Button<x>":{"Action":"CLEAR"}}` and button state `15`.
 
     !!! note "If [ButtonRetain](Commands.md#buttonretain) has been enabled the MQTT message will also contain the MQTT retain flag."
 
@@ -273,11 +299,11 @@ Multipress functions for 2 and more presses cannot be changed using SetOptions o
 `ButtonTopic 1` sends an MQTT message to the device topic. This sets the state of the devices power state accordingly.
 `ButtonTopic <value>` sends an MQTT message command to the custom topic. This does not change the state of the devices power state.
 
-!!! warning "**When a Button is set to a different topic than `0` is not possible to use `Button#State` as a trigger for rules.**"
+!!! warning "**When a Button is set to a different topic than `0` is not possible to use `Button<x>#State` as a trigger for rules.**"
 
 ### Changing Default Functionality
 
-If a [`ButtonTopic`](Commands.md#buttontopic) (and if [`SetOption1 1`](Commands.md#setoption1)) or [`SwitchTopic 1`](Commands.md#switchtopic) is defined (and [`SwitchMode`](Commands.md#switchmode) is set to `5` or `6`) and a button is pressed longer than defined Key Hold Time ([`SetOption32`](Commands.md#setoption32) default 4 seconds) an MQTT message like `cmnd/%topic%/POWER HOLD` will be sent. `HOLD` can be changed with [`StateText4`](Commands.md#StateText).
+If a [`ButtonTopic`](Commands.md#buttontopic) (and if [`SetOption1 1`](Commands.md#setoption1)) or [`SwitchTopic 1`](Commands.md#switchtopic) is defined (and [`SwitchMode`](Commands.md#switchmode) is set to `5` or `6`) and a button is pressed longer than defined Key Hold Time ([`SetOption32`](Commands.md#setoption32) default 4 seconds) an MQTT message like `cmnd/%topic%/POWER HOLD` will be sent. `HOLD` can be changed with [`StateText4`](Commands.md#statetext).
 
 Command [`SetOption11`](Commands.md#setoption11) allows for swapping the functionality between the SINGLE and DOUBLE press of the push button.
 
@@ -298,7 +324,7 @@ All of the above is easier accomplished using [Rules](Rules#button-single-press-
 ## AC Frequency Detection Switch
 Some devices, such as [BlitzWolf BW-SS5](https://templates.blakadder.com/blitzwolf_BW-SS5.html) or [Moes MS-104B](https://templates.blakadder.com/moes-MS-104B.html), use mains frequency detection on their switch inputs. Whenever the connected switch or button is pressed there are 50/60 Hz pulses on the switch input. Inside the switch there's a frequency detection circuit which is connected to a GPIO of the ESP8266 chip which counts those pulses. Prior to Tasmota 8.4 this kind of switching was handled using Counter sensors and scripting which is now simplified.
 
-You can imagine this algorithm as a leaking bucket. Every pulse adds water to the bucket (little more than leaking out in a cycle), but the water is dripping countinously. If the bucket is full, we will treat the switch on. If there's no pulses, the bucket will be empty, and the we will turn off the switch. The size of the bucket is the debouncing time which controls the sensitivity of the algorithm. If the mains frequency is 50 Hz, a whole AC wave is 20 msec long (for 60 Hz it's about 17 msec; 1000 / frequeny if we want the result in milliseconds). The exact frequency is not really important, because we add more water for every pulse.
+You can imagine this algorithm as a leaking bucket. Every pulse adds water to the bucket (little more than leaking out in a cycle), but the water is dripping countinously. If the bucket is full, we will treat the switch on. If there's no pulses, the bucket will be empty, and the we will turn off the switch. The size of the bucket is the debouncing time which controls the sensitivity of the algorithm. If the mains frequency is 50 Hz, a whole AC wave is 20 msec long (for 60 Hz it's about 17 msec; 1000 / frequency if we want the result in milliseconds). The exact frequency is not really important, because we add more water for every pulse.
 
 After you have assigned a Switch<x\> to the GPIO connected to the AC frequency detection circuit use the ['SwitchDebounce'](Commands.md#switchdebounce) command to set the number of pulses required for the switch to be recognized as on or off. For example: `SwitchDebounce 69` will turn the switch on after three pulses and turn it off after three missing ones (3 * 20 msec is 60 and the last digit must be 9 to activate the AC detection). You will probably have to experiment with the values depending on your AC frequency and the devices frequency detection implementation.
 
@@ -323,9 +349,9 @@ MQT: tele/tasmota/SENSOR = {"Time":"2021-01-01T00:00:01","Switch1":"ON"}
 ```
 You can globally change the status text with [`StateText`](Commands.md#statetext) command.
 
-You can change the default "Switch1" text using [`SwitchText<x>`](Commands.md#switchtext) command.  For exemple: `SwitchText1 Garage_Door_State`
+You can change the default "Switch1" text using [`SwitchText<x>`](Commands.md#switchtext) command.  For example: `SwitchText1 Garage_Door_State`
 
-When `Setoption114 1` is used together with `SwitchMode<x> 15`, Tasmota Integration in Home Assistant will create a binary sensor in HA using the Default text "String1" or the text mentionned in the `SwitchText` command.
+When `Setoption114 1` is used together with `SwitchMode<x> 15`, Tasmota Integration in Home Assistant will create a binary sensor in HA using the Default text "String1" or the text mentioned in the `SwitchText` command.
 
 ### Rules
 

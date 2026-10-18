@@ -9,9 +9,9 @@ Flashing over the air requires running a linux shell script called [tuya-convert
 
 Follow this [procedure](https://github.com/ct-Open-Source/tuya-convert#procedure). 
 
-To get the bulb into config mode, have the bulb on for at least 10 seconds, then cycle it off and on 3 times via a physical light switch. The bulb should flash rapidly when its in config mode.
+To get the bulb into config mode, have the bulb on for at least 10 seconds, then cycle it off and on 3 times via a physical light switch. The bulb should flash rapidly when it's in config mode.
 
-Tasmota v6.4.1 basic build is included as part of the tuya-convert script. It will open an WiFi access point named sonoff-XXX on the bulb once flashed correctly.
+Tasmota v6.4.1 basic build is included as part of the tuya-convert script. It will open a WiFi access point named sonoff-XXX on the bulb once flashed correctly.
 
  
 ## Flashing via Serial
@@ -32,7 +32,7 @@ Once the outer (fake glass) is removed you will see this:
 
 ![1](https://i.ibb.co/SwdZLZ9/b22-1-SM.jpg)
 
-Carefully cut / scrape away as much of the sealent on the outer edge of the round circut board then using some needle nose pliers and your spudger pry the round board out.
+Carefully cut / scrape away as much of the sealent on the outer edge of the round circuit board then using some needle nose pliers and your spudger pry the round board out.
 
 ![2](https://i.ibb.co/hmz7QGF/B22-2-SM.jpg)
 

@@ -68,7 +68,7 @@ Here is a simple guide.
 
 ### 0. Open an AWS Account
 
-If you don't have already one, just follow the guide: https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/
+If you don't have already one, just follow the guide: <https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/>
 
 ### 1. Prerequisites
 
@@ -103,9 +103,9 @@ Or click on the link for the region you have chosen:
 
 Region| Code | Launch
 ------|------|-------
-US East (N. Virginia) | <span style="font-family:'Courier';">us-east-1</span> | [![Launch IotThingGenerator in us-east-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=TasmotaMqttPolicy&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-MqttPolicy.yaml)
-EU (Frankfurt) | <span style="font-family:'Courier';">eu-central-1</span> | [![Launch IotThingGenerator in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/new?stackName=TasmotaMqttPolicy&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-MqttPolicy.yaml)
-EU (Paris) | <span style="font-family:'Courier';">eu-west-3</span> | [![Launch IotThingGenerator in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-3#/stacks/new?stackName=TasmotaMqttPolicy&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-MqttPolicy.yaml)
+US East (N. Virginia) | `us-east-1` | [**Launch Stack**](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=TasmotaMqttPolicy&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-MqttPolicy.yaml)
+EU (Frankfurt) | `eu-central-1` | [**Launch Stack**](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/new?stackName=TasmotaMqttPolicy&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-MqttPolicy.yaml)
+EU (Paris) | `eu-west-3` | [**Launch Stack**](https://console.aws.amazon.com/cloudformation/home?region=eu-west-3#/stacks/new?stackName=TasmotaMqttPolicy&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-MqttPolicy.yaml)
 
 1. At the **Create Stack** screen, click **Next**.
    ![MqttPolicy01](https://user-images.githubusercontent.com/49731213/79642169-46be9d80-819c-11ea-8875-55248707c0a2.png)
@@ -146,9 +146,9 @@ Or click on the link for the region you have chosen:
 
 Region| Code | Launch
 ------|------|-------
-US East (N. Virginia) | <span style="font-family:'Courier';">us-east-1</span> | [![Launch IotThingGenerator in us-east-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=Tasmota-01&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-Thing.yaml)
-EU (Frankfurt) | <span style="font-family:'Courier';">eu-central-1</span> | [![Launch IotThingGenerator in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/new?stackName=Tasmota-01&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-Thing.yaml)
-EU (Paris) | <span style="font-family:'Courier';">eu-west-3</span> | [![Launch IotThingGenerator in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-3#/stacks/new?stackName=Tasmota-01&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-Thing.yaml)
+US East (N. Virginia) | `us-east-1` | [**Launch Stack**](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=Tasmota-01&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-Thing.yaml)
+EU (Frankfurt) | `eu-central-1` | [**Launch Stack**](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/new?stackName=Tasmota-01&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-Thing.yaml)
+EU (Paris) | `eu-west-3` | [**Launch Stack**](https://console.aws.amazon.com/cloudformation/home?region=eu-west-3#/stacks/new?stackName=Tasmota-01&templateURL=https://tasmota-eu-central-1.s3.eu-central-1.amazonaws.com/Tasmota-Thing.yaml)
 
 
 1. At the **Create Stack** screen, click **Next**.
@@ -374,7 +374,7 @@ This is your MQTT endpoint, the port is 8883 - MQTT over TLS.
 
 Now on the left pane, click on "**Manage**" > "**Things**". Click on "**Register a thing**", then "**Create a single thing**".
 
-Give your device a name like "**Tasmota-01**". Scroll down and click "**Next**" at the botton right. Then click on "**Create thing without a certificate**".
+Give your device a name like "**Tasmota-01**". Scroll down and click "**Next**" at the bottom right. Then click on "**Create thing without a certificate**".
 
 Now we need to associate the certificate created earlier to your device. In the left panel, click back on "**Secure**" > "**Certificates**". Select the certificate created earlier. In the next pane, click on "**Actions**" in the upper right part. First select "**Attach policy**", check "**TasmotaMqttPolicy**" and "**Attach**". Click again on "**Actions**" and select "**Attach thing**", check "**Tasmota-01**" and "**Attach**".
 

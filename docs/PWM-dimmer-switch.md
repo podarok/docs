@@ -1,7 +1,7 @@
 # PWM Dimmer
 
 !!! info "PWM dimmer is supported in standard tasmota.bin"
-      To enable PWM dimmer operation, select the PWM Dimmer module.
+      To enable PWM dimmer operation, select the PWM Dimmer module. On ESP32, instead config an unused gpio as `Option E1`, and use a build with `#define USE_PWM_DIMMER`.
 
 PWM Dimmer module adds support for PWM dimmer switches and devices with one or more buttons that control devices in a device group. The brightness of the load for PWM dimmers is controlled by a PWM GPIO pin. They typically have power, up and down buttons, a powered-on LED, five brightness LEDs and another status LED. The SD0x dimmer from Martin Jerry, Acenx, Tessan or NTONPOWER is an example of such a device.
 
@@ -44,7 +44,7 @@ When CW/RGB/RGBW/RGBCW lights are in the same device group as the PWM Dimmer dev
 Command|Parameters
 :---|:---
 BriPreset|`<low>,<high>` = set brightness low and high presets<br>`1..255` = set brightness preset<br>`+` = increase brightness preset<br>`-` = decrease brightness preset
-LedMask|Set a bitmask specifiying which LEDs are used to indicate the current brightness. LEDs not included in the bitmask can be controlled with [LedPower<x>](Commands.md#ledpower).<br>`<bitmask>` = bitwise value representing each LED. Values may be entered as either hexadecimal or decimal values (e.g., 0xFFFF = 65535). Note that LED 0 is tied to the relay and is always used to indicate the first level of brightness. 0xFFFF (= 1111 1111 1111 1111) All LEDs are used to indicate the  brightness (default)<br>Ex.: LedMask 3 = Use LEDs 0, 1 and 2 to indicate the brightness.
+LedMask|Set a bitmask specifying which LEDs are used to indicate the current brightness. LEDs not included in the bitmask can be controlled with [LedPower<x>](Commands.md#ledpower).<br>`<bitmask>` = bitwise value representing each LED. Values may be entered as either hexadecimal or decimal values (e.g., 0xFFFF = 65535). Note that LED 0 is tied to the relay and is always used to indicate the first level of brightness. 0xFFFF (= 1111 1111 1111 1111) All LEDs are used to indicate the  brightness (default)<br>Ex.: LedMask 3 = Use LEDs 0, 1 and 2 to indicate the brightness.
 PWMDimmerPWMs|Set the PWM (channel) count of lights in the device group controlled by the module (CW=2, RGB=3, RGBW=4, RGBCW=5).
 SetOption86|Set brightness LED timeout<br>`0` = disable timeout (default)<br>`1` = enable timeout
 SetOption87|Set powered-off LED (nightlight)<br>`0` = disable powered-off LED (default)<br>`1` = enable powered-off LED

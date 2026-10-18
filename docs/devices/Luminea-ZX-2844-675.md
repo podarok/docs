@@ -7,12 +7,12 @@ also known as:
 ![](https://i.ibb.co/8xkFHMp/IMG-1424.jpg)
 
 sold by PEARL and amazon (i know know if they are available outside D-A-CH)
-* https://www.pearl.de/a-ZX2844-3103.shtml
-* https://www.amazon.de/Luminea-Zubeh%C3%B6r-Smarthome-LED-Strips-WLAN-Controller-spritzwassergesch%C3%BCtzt/dp/B074T11793
+* <https://www.pearl.de/a-ZX2844-3103.shtml>
+* <https://www.amazon.de/Luminea-Zubeh%C3%B6r-Smarthome-LED-Strips-WLAN-Controller-spritzwassergesch%C3%BCtzt/dp/B074T11793>
 
 ## Hardware
 
-There is a [ESP8266EX](https://www.espressif.com/sites/default/files/documentation/0a-esp8266ex_datasheet_en.pdf) sitting on the backside. 4 PWM outputs are connected to drive the 4 output channels (RGB + W).
+There is an [ESP8266EX](https://www.espressif.com/sites/default/files/documentation/0a-esp8266ex_datasheet_en.pdf) sitting on the backside. 4 PWM outputs are connected to drive the 4 output channels (RGB + W).
 Red is on GPIO14
 Green is on GPIO12
 Blue is on GPIO5
@@ -32,7 +32,7 @@ And set the GPIO as follow:
 | W | GPIO 0 | PWM4 |
 | PushButton |GPIO 13 | Button1 |
 
-There is an second version with a green PCB and different pinout:
+There is a second version with a green PCB and different pinout:
 
 | Function | ESP Pin | Channel |
 | -------- | ----------- | ------- |

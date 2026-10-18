@@ -16,7 +16,7 @@ After compiling and flashing you will find a new entry in Tasmota webUI: ***Cons
 The "Manage File System" page provides:
 
 * On top, the total size of the file system and the free size
-* A button to upload a file from the host (1st select the file with the `Choose File` button, then `Start Upload`)
+* A button to upload a file from the host (1st select the file with the `Choose File` button, then `Start Upload`). **Beware, only filenames up to 31 characters long are allowed.**
 * A list of available files with timestamp of upload and size in bytes
 * The 'fire' icon allows to delete the file **without any confirmation**
 * The 'memo' icon allows to edit the file and the "Create and edit new file"
@@ -31,7 +31,7 @@ Changes can be discarded by clicking on the button "Manage File System" to retur
 ![File editor](_media/ufs_file_editor.png)
 
 ## Commands
-Complete list of [UFS commands](Commands#ufs)
+Complete list of [UFS commands](Commands.md#ufs)
 
 Also look into [Berry scripting language](Berry.md#loading-filesystem) for ESP32 which works with UFS.
 
@@ -44,7 +44,7 @@ Stores commands that will be executed at every boot, similar to the backlog comm
 Almost any command can be used in the file. However, avoid commands that will make the device reboot, 
 such as: changing Wifi setting, MQTT settings, Templates & GPIO, etc. Commands that triggers reboot
 will create a boot loop which will force Tasmota to automatically disable `autoexec.bat` and other settings.
-See [SetOption36](Commands#setoption36) for more details.
+See [SetOption36](Commands.md#setoption36) for more details.
 
 Commands must be kept one command per line and they will be executed sequentially. Lines starting with semicolon are ignored as comments.
 
@@ -74,15 +74,16 @@ Copy `platformio_override_sample.ini` as `platformio_override.ini`
 
 For ESP8266 boards, activate by removing the `;` in front of one of the below lines:
 
-* `board = esp8266_4M2M` for 2Mb universal file system    
+* `board = esp8266_4M3M` for 3Mb universal file system
+* `board = esp8266_4M2M` for 2Mb universal file system
 * `board = esp8266_2M1M` for 1Mb universal file system
 
 
 !!! warning "About ESP32"
-    **ESP32** boards with default 4MB flash only support a file system **limited to 320KB**. You need a board with more 
+    **ESP32** boards with default 4MB flash only support a file system **limited to 320KB**. You need a board with more
     than 4MB to enable a larger file system.
 
-Extending file system size on ESP32 is performed through the `board_build.partitions` setting. 
+Extending file system size on ESP32 is performed through the `board_build.partitions` setting.
 There are preconfigured settings for 4M, 8M and 16MB ESP32 devices. The are enabled in `platformio_override.ini`
 like for the ESP8266. Comment the standard setting and uncomment the variant you want.
 

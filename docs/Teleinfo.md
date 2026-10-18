@@ -4,7 +4,7 @@ See below how to build you own Tasmota with Teleinfo enabled.
 
 ## Overview
 
-Teleinfo is an Tasmota ENERGY driver for energy meters installed by French national electricity 
+Teleinfo is a Tasmota ENERGY driver for energy meters installed by French national electricity
 grid manager Enedis in all households. Teleinfo driver works with either legacy meters or the new
 Linky meters. It is based on Charles Hallard's LibTeleinfo.
 
@@ -65,7 +65,7 @@ For example schematic on custom Denky board (ESP32) is as follow
 
 ![](_media/teleinfo/teleinfo_en_sch.png)
 
-!!! warning "Resistors values R3 and R4 need to be changed to work with `standard` and `historique`. New official values for R3 is 220ohm and R4 is 3.3Kohm."
+!!! warning "Resistors values R3 and R4 need to be changed to work with `standard` and `historique`. New official values for R3 is 220ohm and R4 is 3.3Kohm. If you still have issues in Standard mode try to increase R3 up to 1Kohm"
 
 As you can see GPIO33 is used for RX and GPIO4 for Enable (need set to 1 to be able to receive data) 
 
@@ -85,7 +85,7 @@ After selecting the GPIOs, click on "SAVE" and Tasmota will reboot.
 You can customize Teleinfo with the command `EnergyConfig <command> <parameter>`. The list of
 supported commands and parameters are:
 
-Command|Parameters
+Subcommand|Parameters
 :---:|:---
  |Without any command and parameter, displays the current active configuration.
 Historique|Set Teleinfo in legacy (_historique_) mode at 1200 baud.
@@ -94,7 +94,8 @@ NoRaw|Disable sending of raw frame (see below).
 Full|Enable sending of all frames in raw mode.
 Changed|Enable sending raw frames only when data has changed.
 Skip _n_|Skips _n_ frames before sending raw frame.
-Limit|Limit raw frames to values subject fo fast change (Power, Current, ...)
+Limit|Limit raw frames to values subject to fast change (Power, Current, ...)
+Stats|Show Teleinfo frames errors statistics
 
 Changing mode from historique to standard and vice-versa will restart tamota.
 
@@ -104,12 +105,12 @@ First thing is to see how teleinfo is configured, for this you need to use `Ener
 
 ```
 17:24:56.758 CMD: EnergyConfig
-17:24:56.766 TIC: Settings Mode:historique, RX:GPIO23, EN:None, Raw:noraw, Skip:0, Limit:0
+17:24:56.766 TIC: Settings Mode:historique, RX:GPIO23, EN:None, Raw:noraw, Skip:0, Limit:0, Stats:0
 17:24:56.783 MQT: emoncms/ch2i/factory/denky_D6C0C0/stat/RESULT = {"EnergyConfig":"Done"}
 ```
 
 In this case we can see we are in historique mode, RX data is coming on GPIO32 (it's an ESP32) and Enable Pin is not used.
-No MQTT raw frame will be sent (noraw) on teleinfo frame reception, so keeping default config of telemetry.
+No MQTT raw frame will be sent (noraw) on teleinfo frame reception, so keeping default config of telemetry. Statistics are disabled, so won't be displayed on WEB UI but still available on console.
 
 ## Energy from Teleinfo
 
@@ -158,7 +159,7 @@ But in our case we have also a TIC object which contains all the frame received 
 
 ## Sending data to other 
 
-Teleinfo is a very powerfull tool to monitor house energy consumption that many of you may need to send theese date to backend for other treatment. For example receiving power value every 5 minutes may be an issue to real time monitoring house consuption, this is why we introduced option to send data in real time. 
+Teleinfo is a very powerful tool to monitor house energy consumption that many of you may need to send these date to backend for other treatment. For example receiving power value every 5 minutes may be an issue to real time monitoring house consuption, this is why we introduced option to send data in real time.
 
 Best would be sending full received frame to MQTT for example, let's do that.
 
@@ -175,11 +176,11 @@ To enable real time raw teleinfo frame to be sent to MQTT you need to use `Energ
 17:57:09.684 MQT: emoncms/ch2i/factory/denky_D6C0C0/tele/SENSOR = {"TIC":{"ADCO":"021528603314","OPTARIF":"HC..","ISOUSC":15,"HCHC":920750,"HCHP":2275614,"PTEC":"HP..","IINST":1,"IMAX":2,"PAPP":200,"HHPHC":"A","MOTDETAT":0}}
 ```
 
-Then each frame received is sent immediatly thru MQTT
+Then each frame received is sent immediately thru MQTT
 
 ### Skip frames
 
-Depending on what you want to do on backend side it may be too much data and flood your database so we intrduced `Skip` flag. For example we may need only one frame up to 10 to be send on backend (so free up some network traffic).
+Depending on what you want to do on backend side it may be too much data and flood your database so we introduced `Skip` flag. For example we may need only one frame up to 10 to be send on backend (so free up some network traffic).
 To limit teleinfo frame to one each 10 frames, you need to use `EnergyConfig Skip 10` command from console
 
 ```
@@ -190,7 +191,7 @@ To limit teleinfo frame to one each 10 frames, you need to use `EnergyConfig Ski
 18:05:17.438 MQT: emoncms/ch2i/factory/denky_D6C0C0/tele/SENSOR = {"TIC":{"ADCO":"021528603314","OPTARIF":"HC..","ISOUSC":15,"HCHC":920750,"HCHP":2275629,"PTEC":"HP..","IINST":1,"IMAX":2,"PAPP":170,"HHPHC":"A","MOTDETAT":0}}
 ```
 
-As you can see we now send one full frame every approx 17s, choose your limit depending on frame lenght (of course) and serial speed. In historique mode a frame takes about 1.2s to be received.
+As you can see we now send one full frame every approx 17s, choose your limit depending on frame length (of course) and serial speed. In historique mode a frame takes about 1.2s to be received.
 
 !!! warning "This works only if Raw mode has been selected with `EnergyConfig Full`."
 
@@ -215,13 +216,19 @@ As you can see we now only data changed is sent.
 
 !!! tip "Don't worry about other fields, they will be send on each telemetry data as usual."
 
+### Errors Statistics
+
+You can check classic frame reception errors (checksum, size, format, ...), with `EnergyConfig Stats x` command. Setting to `1` allow to display statistics on WEB UI while setting to `0` disable this option, but you will be able to always see stats on console with command `EnergyConfig Stats`.
+
+You can clear Stats counters with `EnergyConfig Stats 2`
+
 ## Tasmota Rules examples
 
 ### Raw Frame going outside (HTTP)
 
 TBD, example to post HTTP data every 5 minutes
 
-### Driving RGB Led depening on power
+### Driving RGB Led depending on power
 
 TBD, example to manage Led from Green (no charge) to Red (full charge)
 

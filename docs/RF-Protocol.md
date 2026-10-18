@@ -12,11 +12,11 @@
 Tasmota uses the [rc-switch library](https://github.com/sui77/rc-switch/) to decode RF codes. Supported hardware depends on rc-switch library support only.
 
 ## Sending RF Codes
-Send an RF control code as a decimal or hexadecimal string in a JSON payload. An inexpensive RF receiver such as a [STX882](https://www.nicerf.com/productslist_119_stx882.html) can be connected to a device running Tasmota. In order to send RF data you need to _**configure the connected GPIO as `RFSend (105)`**_  
+Send an RF control code as a decimal or hexadecimal string in a JSON payload. An inexpensive RF receiver such as a [STX882](https://www.nicerf.com/item/433mhz-ask-transmitter-module-stx882) can be connected to a device running Tasmota. In order to send RF data you need to _**configure the connected GPIO as `RFSend (105)`**_  
 
 Command|Parameters
 :---|:---
-RFsend<a id="rfsend"></a>|`<value>` = code decimal or JSON. Data value is required and can be decimal or hexadecimal (using the 0x prefix), other values are optional.<BR><BR>_JSON_<BR>`{"Data":"<value>","Bits":<value>,"Protocol":<value>,"Pulse":<value>}`<BR>`"Data":"<value>"` = hexadecimal code<BR>`"Bits":<value>` = required number of data bits _(default = `24`)_<BR>`"Protocol":<value>` = protocol number _(default = `1`)_<BR>`"Repeat":<value>` = repeat value _(default = `10`)_<BR>`"Pulse":<value>` = pulse value _(`350` = default for protocol 1)_<BR>&emsp;e.g., `RFsend {"Data":"0x7028DC","Bits":24,"Protocol":1,"Pulse":238}`<BR><BR>_Decimal_<BR>`data, bits, protocol, repeat, pulse` <BR>&emsp;e.g., `RFsend 7350492, 24, 1, 10, 238` or `RFsend 0x7028DC, 24, 1, 10, 238`
+RfSend<a id="rfsend"></a>|`<value>` = code decimal or JSON. Data value is required and can be decimal or hexadecimal (using the 0x prefix), other values are optional.<BR><BR>_JSON_<BR>`{"Data":"<value>","Bits":<value>,"Protocol":<value>,"Pulse":<value>}`<BR>`"Data":"<value>"` = hexadecimal code<BR>`"Bits":<value>` = required number of data bits _(default = `24`)_<BR>`"Protocol":<value>` = protocol number _(default = `1`)_<BR>`"Repeat":<value>` = repeat value _(default = `10`)_<BR>`"Pulse":<value>` = pulse value _(`350` = default for protocol 1)_<BR>&emsp;e.g., `RfSend {"Data":"0x7028DC","Bits":24,"Protocol":1,"Pulse":238}`<BR><BR>_Decimal_<BR>`data, bits, protocol, repeat, pulse` <BR>&emsp;e.g., `RfSend 7350492, 24, 1, 10, 238` or `RfSend 0x7028DC, 24, 1, 10, 238`
 
 If you send only the "Data" value in decimal or hexadecimal other values will be sent as default.
 
@@ -31,7 +31,7 @@ When sending decimal formatted command you need to follow the pattern otherwise 
     `RfSend 123456, 24, 1, 238` is missing the `repeat` value so the last number intended as pulse value won't be sent
 
 ## Receiving RF Codes
-An inexpensive RF receiver such as a [SRX882](https://www.nicerf.com/product_132_82.html) can be connected to a device running Tasmota. Configure the GPIO connected to Data pin on the RF receiver as 'RFrecv (106)'. 
+An inexpensive RF receiver such as a [SRX882](https://www.nicerf.com/item/433mhz-ask-transmitter-module-stx882) can be connected to a device running Tasmota. Configure the GPIO connected to Data pin on the RF receiver as 'RFrecv (106)'. 
 <br>Once you have identified the protocols that you want to receive data on , you can enable only those protocols . 
 <br>The RfProtocol command will only work if you have set a pin function to rfrecv
 
@@ -53,7 +53,7 @@ RfProtocol`<idx> <value>`|`<idx>` 1 .. 35 `<value>` 0 or 1 :: This Disables or E
 
 If you have an RF receiver configured, a message will be logged each time an RF code is seen. RF driver will try to decode it against all protocols supported by rc-switch library.   
 
-When Tasmota receives an RF message, the data portion of the payload has the same format as the [`RFSend`](Commands#rfsend) JSON parameters.
+When Tasmota receives an RF message, the data portion of the payload has the same format as the [`RfSend`](Commands.md#rfsend) JSON parameters.
 
 ```
 "RfReceived":{"Data":"<hex-value>","Bits":<value>,"Protocol":<value>,"Pulse":<value>}
@@ -64,6 +64,7 @@ This JSON payload data can be used in a rule such as:
 ```
 ON RfReceived#Data=<hex-value> DO <command> ENDON
 ```
+Note: If you need a decimal-value instead of a \<hex-value\> see [SetOption28](https://tasmota.github.io/docs/Commands/#setoption28).
 
 Examples:  
 **Sonoff RM433 Remote**  

@@ -2,10 +2,10 @@
 Tasmota firmware can be upgraded using 'Firmware Upgrade' option on the main menu and selecting an OTA URL to fetch (and flash) a new firmware on the device.  
 
 <p align="center">
-  <img src="https://github.com/arendst/arendst.github.io/blob/master/media/fw-upgrade-menu.png">
+  <img src="https://github.com/arendst/arendst.github.io/blob/master/media/fw-upgrade-menu.png?raw=true">
 </p>
 
-To use this feature, firmware files need to be hosted on an HTTP web server (e.g., http://ota.tasmota.com/tasmota). Alternatively, users can to deploy a local HTTP server with Apache, Nginx, or other software solutions.  
+To use this feature, firmware files need to be hosted on an HTTP web server (e.g., <http://ota.tasmota.com/tasmota>). Alternatively, users can to deploy a local HTTP server with Apache, Nginx, or other software solutions.  
 
 Python makes available the [Flask (micro)framework](http://flask.pocoo.org) that can be used at different levels of complexity due to its modular architecture. [A simple HTTP server](http://flask.pocoo.org/docs/1.0/quickstart/#a-minimal-application) (hello-world) can be deployed with only *six* lines of Python code.  
 

@@ -27,27 +27,27 @@ The Modbus Bridge driver features 2 kind of bridges.
 
 First assign two GPIOs to `ModBR Tx` and `ModBR Rx` in the "Configure Module" page. The Rx/Tx are relative to the ESP device. For example with ESP-12's hardware serial, set GPIO1 as ModBR Tx and GPIO3 as ModBR Rx.
 
-Then set baud rate with `ModbusSetBaudRate` (default is 9600).
+Then set baud rate with `ModbusBaudRate` (default is 9600).
 
 ## Commands
 
 Command|Parameters
 :---|:---
-ModbusSend|Sending a message to the Modbus network as JSON payload.<BR>```{"deviceAddress":<value>, "functionCode":<value>, "startAddress":<value>, "type":"<value>","count":<value>}```<BR>&emsp;&emsp;`"deviceAddress":1..255` = device address from the Modbus slave.<BR>&emsp;&emsp;`"functioncode":1..6 or 15..16` = function code to send to the Modbus slave (see table below).<BR>&emsp;&emsp;`"startaddress":1..65535` address of the first register to read.<BR>&emsp;&emsp;`"type":"<value>"` Gives the type of the returned data (see table below). <BR>&emsp;&emsp;`"count":1..n` the number of values to be requested.
-|ModbusBaudrate| `1200...115200` = set baudrate for serial (only 8N1 mode) in 1200 increments _(default = `9600`)_
-|ModbusSerialConfig|Set serial protocol using data/parity/stop conventional notation (example: 8N1 or 702)<BR>`0..23` = set serial protocol (`3` equals 8N1)
+ModbusSend|Sending a message to the Modbus network as JSON payload.<BR>```{"deviceAddress":<value>, "functionCode":<value>, "startAddress":<value>, "type":"<value>","count":<value> "endian":<value>}```<BR>&emsp;&emsp;`"deviceAddress":1..255` = device address from the Modbus slave.<BR>&emsp;&emsp;`"functioncode":1..6 or 15..16` = function code to send to the Modbus slave (see table below).<BR>&emsp;&emsp;`"startaddress":1..65535` address of the first register to read.<BR>&emsp;&emsp;`"type":"<value>"` Gives the type of the returned data (see table below). <BR>&emsp;&emsp;`"count":1..n` the number of values to be requested. <BR>&emsp;&emsp;`"endian":msb,lsb` Sets endian msb (big) or lsb (little) (optional).
+ModbusBaudrate| `1200...115200` = set baudrate for serial (only 8N1 mode) in 1200 increments _(default = `9600`)_
+ModbusSerialConfig|Set serial protocol using data/parity/stop conventional notation (example: 8N1 or 702)<BR>`0..23` = set serial protocol (`3` equals 8N1)
   
 ### FunctionCode
 Function Code|Description
 :---|:---
 1|Read Coils
-|2|Read Discrete Inputs
-|3|Read Multiple Holding Registers
-|4|Read Input Registers
-|5|Write Single Coil
-|6|Write Single Register
-|15|Write Multiple Coils
-|16|Write Multiple Registers
+2|Read Discrete Inputs
+3|Read Multiple Holding Registers
+4|Read Input Registers
+5|Write Single Coil
+6|Write Single Register
+15|Write Multiple Coils
+16|Write Multiple Registers
 
   
 ### Type
@@ -56,20 +56,21 @@ Type|Description
 raw|Return or send the slave data as a raw values
 bit|Return or send the slave data as a bit values
 hex|Return or send the slave data as a hex values
-|float|Return or send the slave data as floats
-|uint8|Return or send the slave data as an 8 bits unsigned int
-|uint32|Return or send the slave data as an 32 bits unsigned int
-|uint16|Return or send the slave data as an 16 bits unsigned int
-|uint32|Return or send the slave data as an 32 bits unsigned int
-|int8|Return or send the slave data as an 8 bits signed int
-|int16|Return or send the slave data as an 16 bits signed int
-|int32|Return or send the slave data as an 32 bits signed int
+float|Return or send the slave data as floats
+uint8|Return or send the slave data as an 8 bits unsigned int
+uint32|Return or send the slave data as a 32 bits unsigned int
+uint16|Return or send the slave data as a 16 bits unsigned int
+uint32|Return or send the slave data as a 32 bits unsigned int
+int8|Return or send the slave data as an 8 bits signed int
+int16|Return or send the slave data as a 16 bits signed int
+int32|Return or send the slave data as a 32 bits signed int
   
-### Additional commands for USE_MODBUS_TCP_BRIDGE
+### Additional commands for USE_MODBUS_BRIDGE_TCP
 Command|Parameters
 :---|:---
-ModbusTcpStart| Start the Modbus TCP bridge on the specified `tcp port`
-|ModbusTcpConnect| Connect to a remote Modbus TCP server on `ip address` and `remote tcp port`
+ModbusTCPStart | `<port>` = start the Modbus TCP bridge on the specified port
+ModbusTCPConnect | `<port>,<ip_address>` = connect to a remote Modbus TCP server on remote tcp `port˙` and `ip_address`
+ModbusTCPMqtt| `<x>` = send results queried by tcp modbus client also to mqtt when parameter is 1
   
 ## Returned Data
 ```json
@@ -87,13 +88,13 @@ Errors from this Modbus bridge module can be recognized by `MBS: MBR Send error`
 Errorcode|Description
 :---|:---
 1|nodataexpected
-|2|wrongdeviceaddress
-|3|wrongfunctioncode
-|4|wrongstartaddress
-|5|wrongtype
-|6|wrongregistercount
-|7|wrongcount
-|8|tomanydata
+2|wrongdeviceaddress
+3|wrongfunctioncode
+4|wrongstartaddress
+5|wrongtype
+6|wrongregistercount
+7|wrongcount
+8|tomanydata
   
 ### Driver Errors  
 Errors from the tasmotamodbus driver can be recognized by `MBS: MBR Driver error`
@@ -101,18 +102,18 @@ Errors from the tasmotamodbus driver can be recognized by `MBS: MBR Driver error
 Errorcode|Description
 :---|:---
 1|Illegal Function
-|2|Illegal Data Address
-|3|Illegal Data Value
-|4|Slave Error
-|5|Acknowledge but not finished (no error)
-|6|Slave Busy
-|7|Not enough minimal data received
-|8|Memory Parity error
-|9|Crc error
-|10|Gateway Path Unavailable
-|11|Gateway Target device failed to respond
-|12|Wrong register count
-|13|Register data not specified
+2|Illegal Data Address
+3|Illegal Data Value
+4|Slave Error
+5|Acknowledge but not finished (no error)
+6|Slave Busy
+7|Not enough minimal data received
+8|Memory Parity error
+9|Crc error
+10|Gateway Path Unavailable
+11|Gateway Target device failed to respond
+12|Wrong register count
+13|Register data not specified
 
 ## Example of use
 Requesting 4 holding registers starting from register 1 from slave address 
@@ -120,7 +121,7 @@ Requesting 4 holding registers starting from register 1 from slave address
 #### Register 1
 On command:
 ```
-ModBusSend {"deviceaddress": 1, "functioncode": 3, "startaddress": 1, "type":"uint16", "count":4}`
+ModBusSend {"deviceaddress": 1, "functioncode": 3, "startaddress": 1, "type":"uint16", "count":4}
 ```
 
 Response:
@@ -143,7 +144,7 @@ RSL: RESULT = {"ModbusReceived":{"DeviceAddress":1,"FunctionCode":5,"StartAddres
 #### Setting multiple coils starting from coil register 1 from slave address 1
 On command:
 ```
-ModBusSend '{"deviceaddress": 1, "functioncode": 15, "startaddress": 1, "type":"bit", "count":8, "values":[1,0,0,1,1,1,0,0]}
+ModBusSend {"deviceaddress": 1, "functioncode": 15, "startaddress": 1, "type":"bit", "count":8, "values":[1,0,0,1,1,1,0,0]}
 ```
 Response:
 ```json

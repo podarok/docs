@@ -119,7 +119,7 @@ This callback ID is called every second.
 
 It can be useful for anything that you need to do on a per second basis and is commonly used as an entry point to detect a driver or initialize an externally driven device such as a sensor, relay board or other forms of input/output required by your driver.
 
-You would normally want to make sure you've detected and initialised before it is used by `JSON_APPEND`, etc. so that its ready to serve data.
+You would normally want to make sure you've detected and initialised before it is used by `JSON_APPEND`, etc. so that it's ready to serve data.
 
 The generally accepted way to use this would be to detect your sensor and once this is done set a sensor value accordingly so that the function does not use unnecessary resources during future calls, for example:
 ```c++
@@ -209,7 +209,7 @@ NOTE: This callback ID is deprecated as sensors should prepare for more regular 
 
 `FUNC_JSON_APPEND`
 
-This callback ID is called when [`TelePeriod`](Commands#teleperiod) is due to append telemetry data to the MQTT JSON string or at approximately every 2 seconds when a rule is checked, e.g.
+This callback ID is called when [`TelePeriod`](Commands.md#teleperiod) is due to append telemetry data to the MQTT JSON string or at approximately every 2 seconds when a rule is checked, e.g.
 ```c++
 snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"MPR121%c\":{\"Button%i\":%i}}"), pS->id[i], j, BITC(i,j));
 ```
@@ -574,7 +574,7 @@ _Z8Examplefff:
 	mov.n	a2, a12	#, D.171139       <- load a2 with a12: sin(a)
 	call0	__mulsf3	#         <- multiply 'sin(a)*(b+0.4f)'
 	l32r	a3, .LC1013	#,        <- load a3 with 3.5f
-	call0	__subsf3	#         <- substract 
+	call0	__subsf3	#         <- subtract
 	l32i.n	a0, sp, 12	#,        <- restore a0 (return address)
 	l32i.n	a12, sp, 8	#,        <- restore a12
 	l32i.n	a13, sp, 4	#,        <- restore a13
@@ -671,7 +671,7 @@ _Z9Examplef2ff:
 	call0	__muldf3	#        <- multiply double
 	l32r	a4, .LC1015	#,
 	l32r	a5, .LC1015+4	#,
-	call0	__subdf3	#        <- substract double
+	call0	__subdf3	#        <- subtract double
 	call0	__truncdfsf2	#        <- truncate double to float
 	l32i.n	a0, sp, 12	#,
 	l32i.n	a12, sp, 8	#,

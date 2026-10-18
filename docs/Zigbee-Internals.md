@@ -1,12 +1,14 @@
 # Zigbee internals
+
 [Back to Zigbee](Zigbee)
 
 This page is for developers who want to understand how Zigbee2Tasmota (Z2T) works and its implementation details.
 
 ## CC2530 Serial protocol
+
 The CC2530 is flashed with Texas Instrument ZNP Software version 1.2. The protocol is build on a serial communication between the main cpu and the CC2530.
 
-[Z-Stack 1.2 Monitor and Test API](/docs/_media/zigbee/Z-Stack_API_1_2.pdf)
+[Z-Stack 1.2 Monitor and Test API](_media/zigbee/Z-Stack_API_1_2.pdf)
 
 Serial communication is configured as 8N1, 115200 bauds. We suggest to use GPIO13/15 because they have hardware serial support. Please note that there is only one usable hardware serial, either on GPIO1/3 or GPIO13/15.
 
@@ -53,7 +55,7 @@ Instructions encoded with 4 bytes:
 * `LABEL(x)`: no-operation, and defines a Label (8 bits) that can be called by code.
 * `GOTO(x)`: moves the PC to the instruction with LABEL(x)
 * `ZI_ON_ERROR_GOTO(x)`: if an error occurs, move to label <x>
-* `ZI_ON_TIMEOUT_GOTO(x)`: if a timeout occurs, move to lavel <x>
+* `ZI_ON_TIMEOUT_GOTO(x)`: if a timeout occurs, move to label <x>
 * `WAIT(y)`: wait for <y> milliseconds (unsigned 16 bits). Note the granularity is 50ms and the wait is non-blocking
 * `WAIT_FOREVER`: pause the state machine and wait for an external goto
 * `STOP`: stop completely the state machine, only used after an unrecoverable error
@@ -109,7 +111,7 @@ Configure (only if needed):
 
 Start:
 
-* Wait for CC2530 message saying the coordinator sucessfully started
+* Wait for CC2530 message saying the coordinator successfully started
 * Query DeviceInfo
 * Query Node Descriptor
 * Query Active Endpoints
@@ -199,7 +201,7 @@ Details of `Z_IncomingMessage()`:
 	
 2. If `ZCL_REPORT_ATTRIBUTES`, call `parseReportAttributes()`. This is the general case for sensor values (temperature...)
 	
-3. If `ZCL_READ_ATTRIBUTES_RESPONSE`, call `parseReadAttributesResponse()`. This happens as a response to reading attributes, and the handling is similar to the attribute reporting (although the syntax of the message is slightly differen).
+3. If `ZCL_READ_ATTRIBUTES_RESPONSE`, call `parseReadAttributesResponse()`. This happens as a response to reading attributes, and the handling is similar to the attribute reporting (although the syntax of the message is slightly different).
 	
 4. If `ZCL_READ_ATTRIBUTES`, call `parseReadAttributes()`. This happens rarely, typically when a device asks the coordinator for attributes like the `local_time`.
 	
@@ -214,25 +216,38 @@ All the previous commands add attributes to a local `attr_list` object. These at
 Note: it is important to keep attributes as Cluster/Attribute types so that we can later apply transformations on them.
 
 Note2: `LinkQuality`, `Device`, `Name`, `Group` and `Endpoint` are _special_ values that do are not registered as actual attributes.
+	
+Note3: `BatteryPercentage` is systematically added with the last known value to each attribute reporting.
 
-#### 6. Apply transoformations to the attributes.
+#### 6. Apply transformations to the attributes.
 
 There are many transformations that are required because some device use proprietary values, or we need to compute new values out of the existing attributes.
+	
+1. Reject Loopback
+If the message is sent from the coordinator to the coordinator itself, which can happen with broadcast message, it is discarded with DEBUG level log `loopback message, ignoring`.
 
-1. Generate synthetic attributes `generateSyntheticAttributes()`.
-This is mainly used for Xiaomi Aqara devices. Aqara uses cluster 0xFF01 and 0xFF02 to send structured messages. The good side is that it allows to send attributes from different clusters in a single message, whereas the ZCL standard would have required several messages. The bad side is that Aqara reuses the same attribute numbers for different value, and you need to know the device type to decode; which makes the whole process work only if the pairing process sucessfully got the ModelId.
+2. Generate synthetic attributes `generateSyntheticAttributes()`.
+This is mainly used for Xiaomi Aqara devices. Aqara uses cluster 0xFF01 and 0xFF02 to send structured messages. The good side is that it allows to send attributes from different clusters in a single message, whereas the ZCL standard would have required several messages. The bad side is that Aqara reuses the same attribute numbers for different value, and you need to know the device type to decode; which makes the whole process work only if the pairing process successfully got the ModelId.
+This is also used by Aqara Cube and Aqara vibration sensor to decode values.
 
-2. Compute synthetic attributes `computeSyntheticAttributes()`.
+3. Remove invalid attributes `removeInvalidAttributes()`
+Any value out of normal range is removed, for example `lumi.weather` reporting a temperature below -100.0°C is removed.
+
+4. Apply synonyms `applySynonymAttributes()`
+Apply any synonym from the Zigbee plugin definitions on a per device basis. If matched, the synonym maps the attribute to a new cluster/attrid and applies a multiplier or divisor if required.
+
+5. Compute synthetic attributes `computeSyntheticAttributes()`.
 This is used to add computed attributes or fix some bugs in devices.
 Currently it computes the `BatteryPercentage` from the `BatteryVoltage` if the `BatteryPercentage` is not already present.
 It computes `SeaPressure` using the Tasmota `Altitude` setting.
 It fixes an Eurotronic bug in the encoding of `Pi Heating Demand` which is sent in the 0..255 range instead of 0..100 range.
 It fixes the IKEA Remote battery value which is half what it needs to be.
+It captures multipliers and divisors for AC Voltage/Current/Power (cluster 0x0B04) and stores them in the Z_Data.
 	
-3. Generate callbacks and timers `generateCallBacks()`.
+6. Generate callbacks and timers `generateCallBacks()`.
 This is used to register deferres callbacks. It is only used for `Occypancy` for now. Many PIR sensors report `"Occupancy":1` but don't report the lack of occupancy. This function sets a timer to artificially generate `"Occupancy":0` after a definite amount of time (defaults to 90 seconds).
 
-4. Post-process attributes `Z_postProcessAttributes()`.
+7. Post-process attributes `Z_postProcessAttributes()`.
 This function does the final transformation of attributes to their human readable format.
 
 First the endpoint is added as suffix if `SetOption101 1` is set, if the source endpoint is not `1`, and if the device is known to have more than one endpoint (check with `ZbStatus2`).
@@ -249,7 +264,7 @@ Finally the attribute name is replaced by its string value (ex: `0402/0000` is r
 
 #### 7. Publish the final message to MQTT or defer the message.
 
-In the general case, attributes are not published immediately but kept in memory for a short period of time. This allows for debouncing of identical messages, and coalescing of values (Temperature, Pressure, Humidity) in a single MQTT message, even if there were received in 3 seperate messages.
+In the general case, attributes are not published immediately but kept in memory for a short period of time. This allows for debouncing of identical messages, and coalescing of values (Temperature, Pressure, Humidity) in a single MQTT message, even if there were received in 3 separate messages.
 
 The default timer is a compile time `#define USE_ZIGBEE_COALESCE_ATTR_TIMER` with a default value of 350 ms.
 

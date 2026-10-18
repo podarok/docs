@@ -21,6 +21,7 @@
     ```
 
 ## Description
+
 This driver simulates an additional relay in your Tasmota device. If you have N physical relays and you configure GPIO pin functions `DLP Tx` and `DLP Rx` you'll see relay (N+1) after reboot. The two GPIO pins will be used for serial communication with your LCD or DLP projector. The communication protocol is unique for each manufacturer (compile-time option). The driver polls the projector's state periodically and updates the fake relay state. When you toggle the fake relay, serial commands are sent to the projector to power it up or down. While the projector is running, the driver prevents to switch off the real relay that feeds the projector. This protects the lamp of the projector (needs to be cooled down before power is cut from the device).
 
 ## Supported Projectors
@@ -32,11 +33,14 @@ This driver simulates an additional relay in your Tasmota device. If you have N 
 Fixes and definitions for further manufacturers should go to `tasmota\xdrv_53_projector_ctrl.h`
 
 ## Physical Connection
+
 Connect your Tasmota GPIO pins (3.3V TTL level) to a MAX3232 interface (cheap items on internet sales). Such interface changes TTL signals to proper RS232 levels. There are 4 wires on TTL side (Vcc, GND, Rx and Tx) and 3 wires on RS232 side (GND, Tx and Rx). A wire jumper between pins 7(RTS) and 8(CTS) may be needed in DSUB9 connector going to projector.
 
-![Unboxed](_media/projectorCtrl_TH16_unboxed.jpg)
-![Mounted](_media/projectorCtrl_TH16_mounted.jpg)
-![V300W](_media/projectorCtrl_V300W.jpg)
+![Unboxed](_media/projector/ProjectorCtrl_TH16_unboxed.jpg)
+
+![Mounted](_media/projector/ProjectorCtrl_TH16_mounted.jpg)
+
+![V300W](_media/projector/ProjectorCtrl_V300W.jpg)
 
 ### Tasmota Settings 
 
@@ -48,9 +52,8 @@ In the **_Configuration -> Configure Module_** page assign:
 Replace GPIO1/GPIO3 with your scenario. Use command `Weblog 3` to see extended logging of serial communication in Console.
 
 ## Projector Configuration
+
 Check your projector settings concerning Serial port. It must match Tasmota settings eg. 9600 8N1. Some models have "ID number" feature to allow several projectors in one room. The control commands in Tasmota contain ID 0. Please switch off the "ID" control completely or set the ID to 0.
 
 Since Acer H5360BD does not offer a simple RS2332 port setup is as follows:
 ![ESP01-RS232-AcerH5360](https://user-images.githubusercontent.com/4789510/174459412-f61db899-cdb3-4888-9484-9ca07e3befb0.png)
-
-

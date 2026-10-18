@@ -36,11 +36,11 @@ Commands are send from the ESP8266 via a 19200 baud serial connection to a dedic
 
 It is therefore important to disable any serial communication to and from the device once you have debugged any anomalies.
 
-To assist easy installation serial logging is enabled by default in Tasmota. For the Dual it is mandatory to turn it off withe `SerialLog 0` comand.
+To assist easy installation serial logging is enabled by default in Tasmota. For the Dual it is mandatory to turn it off withe `SerialLog 0` command.
 
 Another reason for intermittent switching errors can be Power Saving. Make sure it is disabled by executing the command ```sleep 0```.
 
 ## Official Sources
-* Itead Product Page: http://sonoff.itead.cc/en/products/sonoff/sonoff-dual
-* Itead Shop: https://www.itead.cc/sonoff-dual.html
-* Itead Wiki: https://www.itead.cc/wiki/Sonoff_Dual
+* Itead Product Page: <http://sonoff.itead.cc/en/products/sonoff/sonoff-dual>
+* Itead Shop: <https://www.itead.cc/sonoff-dual.html>
+* Itead Wiki: <https://www.itead.cc/wiki/Sonoff_Dual>

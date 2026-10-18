@@ -14,7 +14,7 @@ The foremost reason for the inclusion of this driver was to have a network unrel
 
 !!! info "Only u-blox-devices are supported"  
 
-The UBX binary protocol was chosen, because it is very memory efficient and all the needed data can be read without further parsing.  The genereric NMEA-standard is NOT supported!  
+The UBX binary protocol was chosen, because it is very memory efficient and all the needed data can be read without further parsing.  The generic NMEA-standard is NOT supported!
 
 The driver is tested on a NEO-6m and a Beitian-220. Series 7 should work too. These modules are quite cheap, starting at about 3.50€ for the NEO-6m.  
 
@@ -24,7 +24,7 @@ The driver is tested on a NEO-6m and a Beitian-220. Series 7 should work too. Th
 - simplified NTP-Server
 - sets system time automatically and Settings.latitude and Settings.longitude via command
 - get position and time data
-- can log postion data with timestamp to flash with a small memory footprint of only 12 Bytes per record (!!EXPERIMENTAL!!)
+- can log position data with timestamp to flash with a small memory footprint of only 12 Bytes per record (!!EXPERIMENTAL!!)
 - constructs a GPX-file for download of this data
 - Web-UI and console command interface
 
@@ -61,19 +61,19 @@ After the first recording, a download-link will appear in the web interface. By 
 
 | Command | Description |
 |---|---|
-| sensor60 0 |   write to all available sectors, then restart and overwrite the older ones |
-| sensor60 1 |   write to all available sectors, then restart and overwrite the older ones |
-| sensor60 2 |   filter out horizontal drift noise |
-| sensor60 3 |   turn off noise filter |
-| sensor60 4 |   start recording, new data will be appended |
-| sensor60 5 |   start new recording, old data will lost |
-| sensor60 6 |   stop recording, download link will be visible in Web-UI |
-| sensor60 7 |   send mqtt on new postion TELE -> consider to set TELE to a very high value |
-| sensor60 8 |   only TELE message |
-| sensor60 9 |   start NTP-Server |
-| sensor60 10 |   deactivate NTP-Server |
-| sensor60 11 |   force update of Tasmota-system-UTC with every new GPS-time-message |
-| sensor60 12 |   do NOT update of Tasmota-system-UTC with every new GPS-time-message |
-| sensor60 13 |   set latitude and longitude in settings |
-| sensor60 14 |   open virtual serial port over TCP, usable for u-center<br>tcp://ip-address:port (default port 1234)<br>⚠️ misconfiguration via u-center can virtually brick the device ⚠️   |
-| sensor60 15 |   pause virtual serial port over TCP  (connection stays active in the background) |
+| Sensor60 0 |   write to all available sectors, then restart and overwrite the older ones |
+| Sensor60 1 |   write to all available sectors, then restart and overwrite the older ones |
+| Sensor60 2 |   filter out horizontal drift noise |
+| Sensor60 3 |   turn off noise filter |
+| Sensor60 4 |   start recording, new data will be appended |
+| Sensor60 5 |   start new recording, old data will lost |
+| Sensor60 6 |   stop recording, download link will be visible in Web-UI |
+| Sensor60 7 |   send mqtt on new position TELE -> consider to set TELE to a very high value |
+| Sensor60 8 |   only TELE message |
+| Sensor60 9 |   start NTP-Server |
+| Sensor60 10 |   deactivate NTP-Server |
+| Sensor60 11 |   force update of Tasmota-system-UTC with every new GPS-time-message |
+| Sensor60 12 |   do NOT update of Tasmota-system-UTC with every new GPS-time-message |
+| Sensor60 13 |   set latitude and longitude in settings |
+| Sensor60 14 |   open virtual serial port over TCP, usable for u-center<br>tcp://ip-address:port (default port 1234)<br>⚠️ misconfiguration via u-center can virtually brick the device ⚠️   |
+| Sensor60 15 |   pause virtual serial port over TCP  (connection stays active in the background) |

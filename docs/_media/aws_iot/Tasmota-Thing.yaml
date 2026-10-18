@@ -10,7 +10,7 @@ Parameters:
     Type: String
     AllowedValues: [ "Delete", "Retain" ]
     Default: "Retain"
-    Description: When you delete the CloudFormation template, "Delete" will also delet this policy, "Retain" will keep it
+    Description: When you delete the CloudFormation template, "Delete" will also delete this policy, "Retain" will keep it
   MQTTPolicyName:
     Type: String
     Default: "TasmotaMqttPolicy"
@@ -166,7 +166,7 @@ Resources:
       Handler: "index.handler"
       MemorySize: 512
       Role: !GetAtt LambdaExecRoleProvisioning.Arn
-      Runtime: python3.7
+      Runtime: python3.12
       Timeout: 5
       Code:
         ZipFile: |
@@ -236,7 +236,8 @@ Resources:
       Handler: "index.handler"
       MemorySize: 512
       Role: !GetAtt LambdaExecRoleProvisioning.Arn
-      Runtime: python3.7
+      Runtime: python3.12
+      Architectures: ['arm64']
       Timeout: 5
       Code:
         ZipFile: |
